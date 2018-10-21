@@ -45,15 +45,11 @@ document.addEventListener("DOMContentLoaded", function() {
                 timeout: 600000,
                 success: function (data) {
                     data= $.parseJSON(data);
-                    if (data.codigo == "OK"){
+                    if (data.codigo === "OK"){
                         salary.prop("disabled", false);
                     }else{
                         alert("El rut no es valido, ingrese nuevamente.");
                     }
-                },
-                error: function (e) {
-                    console.log("Error" + e);
-
                 }
             });
         }
@@ -81,17 +77,13 @@ document.addEventListener("DOMContentLoaded", function() {
                 timeout: 600000,
                 success: function (data) {
                     data= $.parseJSON(data);
-                    if (data.codigo == "OK"){
+                    if (data.codigo === "OK"){
                         date.prop('disabled', false);
                         sliderFees.prop('disabled', false);
                         sliderAmount.prop('disabled', false);
                     }else{
                         alert("Salario ingresado no es valido, ingrese nuevamente.");
                     }
-                },
-                error: function (e) {
-                    console.log("Error" + e);
-
                 }
             });
         }
@@ -112,7 +104,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
     btnSubmit.click(function(){
-        validate = true;
+        var validate = true;
 
         if (salary.val() === '' || rut.val() === '' || amount.val() === '' || fees.val() === '' || date.val() === '') {
             validate = false;
@@ -121,7 +113,7 @@ document.addEventListener("DOMContentLoaded", function() {
         if (validate) {
             alert('DALE');
         } else {
-            alert('NEGATIVO');
+            alert("NEGATIVO");
         }
     });
 

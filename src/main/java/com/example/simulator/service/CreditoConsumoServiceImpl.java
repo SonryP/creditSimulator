@@ -1,8 +1,6 @@
 package com.example.simulator.service;
 
-import com.example.simulator.entity.Credito;
 import com.example.simulator.entity.Respuesta;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
@@ -20,8 +18,8 @@ public class CreditoConsumoServiceImpl implements CreditoConsumoService {
     private final int MAX_SALARY = Integer.MAX_VALUE;
     private final int MIN_CREDIT_AMMOUNT = 100000;
     private final int MAX_CREDIT_AMMOUNT = 100000000;
-    private final int MIN_NUM_OF_MONTHLY_FEES = 4;
-    private final int MAX_NUM_OF_MONTHLY_FEES = 100;
+    //private final int MIN_NUM_OF_MONTHLY_FEES = 4;
+    //private final int MAX_NUM_OF_MONTHLY_FEES = 100;
 
     @Override
     public Respuesta validarRut(String rut) {
@@ -35,14 +33,15 @@ public class CreditoConsumoServiceImpl implements CreditoConsumoService {
 
             char dv = rut.charAt(rut.length() - 1);
 
-            int m = 0, s = 1;
+            int m = 0;
+            int s =1;
             for (; rutAux != 0; rutAux /= 10) {
                 s = (s + rutAux % 10 * (9 - m++ % 6)) % 11;
             }
             if (dv == (char) (s != 0 ? s + 47 : 75)) {
                 validacion = true;
             }
-            if (validacion == true){
+            if (validacion){
                 respuesta.setCodigo("OK");
                 respuesta.setMensaje("Validación rut ok.");
             }else{

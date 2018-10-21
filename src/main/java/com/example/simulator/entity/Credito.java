@@ -13,8 +13,6 @@ public class Credito implements Serializable {
     private Calendar dateOfFirstFee;
     private ArrayList<Integer> nonPaymentMonth;
 
-    public Credito() {}
-
     public String getRut() {
         return rut;
     }
