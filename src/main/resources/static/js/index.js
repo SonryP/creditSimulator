@@ -62,7 +62,7 @@ $(document).ready(function() {
             datos = rut.val();
             $.ajax({
                 type: "POST",
-                url: "/validaRut",
+                url: "/rutValidate",
                 data: {"rut": datos},
                 cache: false,
                 timeout: 600000,
@@ -95,7 +95,7 @@ $(document).ready(function() {
             datos = salary.val();
             $.ajax({
                 type: "POST",
-                url: "/validaSalario",
+                url: "/rentValidate",
                 data: {"rent": datos},
                 cache: false,
                 timeout: 600000,

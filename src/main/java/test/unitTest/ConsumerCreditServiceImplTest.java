@@ -1,4 +1,4 @@
-package com.example.simulator.test.serviceTest;
+package test.unitTest;
 
 import org.junit.Test;
 

@@ -30,7 +30,7 @@ public class SimulatorController {
         return "index";
     }
 
-    @RequestMapping(value = "/validaRut", method = RequestMethod.POST)
+    @RequestMapping(value = "/rutValidate", method = RequestMethod.POST)
     @ResponseBody
     public String rutValidate(@RequestParam String rut) {
         Response response = new Response();
@@ -44,7 +44,7 @@ public class SimulatorController {
         return new Gson().toJson(response);
     }
 
-    @RequestMapping(value = "/validaSalario", method = RequestMethod.POST)
+    @RequestMapping(value = "/rentValidate", method = RequestMethod.POST)
     @ResponseBody
     public String rentValidate(@RequestParam String rent) {
         Response response = new Response();
@@ -58,7 +58,7 @@ public class SimulatorController {
         return new Gson().toJson(response);
     }
 
-    @RequestMapping(value = "/validaCredito", method = RequestMethod.POST)
+    @RequestMapping(value = "/creditValidate", method = RequestMethod.POST)
     @ResponseBody
     public String creditValidate(@RequestParam String credit) {
         Response response = new Response();
