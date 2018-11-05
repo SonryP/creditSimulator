@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 timeout: 600000,
                 success: function (data) {
                     data= $.parseJSON(data);
-                    if (data.codigo === "OK"){
+                    if (data.code === "OK"){
                         salary.prop("disabled", false);
                     }else{
                         alert("El rut no es valido, ingrese nuevamente.");
@@ -72,12 +72,12 @@ document.addEventListener("DOMContentLoaded", function() {
             $.ajax({
                 type: "POST",
                 url: "/validaSalario",
-                data: {"salario": datos},
+                data: {"rent": datos},
                 cache: false,
                 timeout: 600000,
                 success: function (data) {
                     data= $.parseJSON(data);
-                    if (data.codigo === "OK"){
+                    if (data.code === "OK"){
                         date.prop('disabled', false);
                         sliderFees.prop('disabled', false);
                         sliderAmount.prop('disabled', false);

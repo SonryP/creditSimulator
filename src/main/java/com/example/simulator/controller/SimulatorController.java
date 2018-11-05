@@ -1,7 +1,7 @@
 package com.example.simulator.controller;
 
-import com.example.simulator.entity.Respuesta;
-import com.example.simulator.service.CreditoConsumoService;
+import com.example.simulator.entity.Response;
+import com.example.simulator.service.ConsumerCreditService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +18,10 @@ public class SimulatorController {
     private static final Logger LOG = LoggerFactory.getLogger(SimulatorController.class);
 
     @Autowired
-    private CreditoConsumoService CreditoConsumoService;
+    private ConsumerCreditService consumerCreditService;
 
     @RequestMapping(value = "index", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
-    public String consultaCredito() {
+    public String creditSimulator() {
         try {
             LOG.info("Inicio consulta credito");
         } catch (Exception e) {
@@ -32,44 +32,44 @@ public class SimulatorController {
 
     @RequestMapping(value = "/validaRut", method = RequestMethod.POST)
     @ResponseBody
-    public String validaRut(@RequestParam String rut) {
-        Respuesta respuesta = new Respuesta();
+    public String rutValidate(@RequestParam String rut) {
+        Response response = new Response();
         try {
             LOG.info("Rut ingresado: {}", rut);
-            respuesta = CreditoConsumoService.validarRut(rut);
-            LOG.info("Response->{}", respuesta.getCodigo());
+            response = consumerCreditService.rutValidate(rut);
+            LOG.info("Response->{}", response.getCode());
         } catch (Exception e) {
             LOG.error("Exception", e);
         }
-        return new Gson().toJson(respuesta);
+        return new Gson().toJson(response);
     }
 
     @RequestMapping(value = "/validaSalario", method = RequestMethod.POST)
     @ResponseBody
-    public String validaSalario(@RequestParam String salario) {
-        Respuesta respuesta = new Respuesta();
+    public String rentValidate(@RequestParam String rent) {
+        Response response = new Response();
         try {
-            LOG.info("Salario ingresado: {}", salario);
-            respuesta = CreditoConsumoService.validaSalario(salario);
-            LOG.info("Response->{}", respuesta.getCodigo());
+            LOG.info("Salario ingresado: {}", rent);
+            response = consumerCreditService.rentValidate(rent);
+            LOG.info("Response->{}", response.getCode());
         } catch (Exception e) {
             LOG.error("Exception", e);
         }
-        return new Gson().toJson(respuesta);
+        return new Gson().toJson(response);
     }
 
     @RequestMapping(value = "/validaCredito", method = RequestMethod.POST)
     @ResponseBody
-    public String validaCredito(@RequestParam String credito) {
-        Respuesta respuesta = new Respuesta();
+    public String creditValidate(@RequestParam String credit) {
+        Response response = new Response();
         try {
-            LOG.info("Credito ingresado: {}", credito);
-            respuesta = CreditoConsumoService.validaCredito(credito);
-            LOG.info("Response->{}", respuesta.getCodigo());
+            LOG.info("Credito ingresado: {}", credit);
+            response = consumerCreditService.creditValidate(credit);
+            LOG.info("Response->{}", response.getCode());
         } catch (Exception e) {
             LOG.error("Exception", e);
         }
-        return new Gson().toJson(respuesta);
+        return new Gson().toJson(response);
     }
 
 }
