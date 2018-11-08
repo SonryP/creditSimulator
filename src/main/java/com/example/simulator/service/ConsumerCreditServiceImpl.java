@@ -1,15 +1,20 @@
 package com.example.simulator.service;
 
 import com.example.simulator.entity.Response;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Service
 public class ConsumerCreditServiceImpl implements ConsumerCreditService {
+
+    @Autowired
+    private UtilsService utilsService;
 
     private static final Logger LOG = LoggerFactory.getLogger(ConsumerCreditServiceImpl.class);
 
@@ -23,28 +28,33 @@ public class ConsumerCreditServiceImpl implements ConsumerCreditService {
     public Response rutValidate(String rut) {
         Response response = new Response();
         try {
-            boolean validate = false;
-            rut =  rut.toUpperCase();
-            rut = rut.replace(".", "");
-            rut = rut.replace("-", "");
-            int rutAux = Integer.parseInt(rut.substring(0, rut.length() - 1));
+            if (rut != null && !"".equalsIgnoreCase(rut)) {
+                boolean validate = false;
+                rut = rut.toUpperCase();
+                rut = rut.replace(".", "");
+                rut = rut.replace("-", "");
+                int rutAux = Integer.parseInt(rut.substring(0, rut.length() - 1));
 
-            char dv = rut.charAt(rut.length() - 1);
+                char dv = rut.charAt(rut.length() - 1);
 
-            int m = 0;
-            int s =1;
-            for (; rutAux != 0; rutAux /= 10) {
-                s = (s + rutAux % 10 * (9 - m++ % 6)) % 11;
-            }
-            if (dv == (char) (s != 0 ? s + 47 : 75)) {
-                validate = true;
-            }
-            if (validate){
-                response.setCode("OK");
-                response.setMessage("Validación rut ok.");
-            }else{
+                int m = 0;
+                int s = 1;
+                for (; rutAux != 0; rutAux /= 10) {
+                    s = (s + rutAux % 10 * (9 - m++ % 6)) % 11;
+                }
+                if (dv == (char) (s != 0 ? s + 47 : 75)) {
+                    validate = true;
+                }
+                if (validate) {
+                    response.setCode("OK");
+                    response.setMessage("Validación rut ok.");
+                } else {
+                    response.setCode("NOK");
+                    response.setMessage("Rut ingresado no es valido.");
+                }
+            } else {
                 response.setCode("NOK");
-                response.setMessage("Rut ingresado no es valido.");
+                response.setMessage("Campo de rut se ingresó vacío.");
             }
         } catch (java.lang.NumberFormatException e) {
             LOG.info("Error: ", e);
@@ -56,20 +66,20 @@ public class ConsumerCreditServiceImpl implements ConsumerCreditService {
     public Response rentValidate(String rent) {
         Response response = new Response();
         try {
-            if (isNumeric(rent)){
+            if (utilsService.isNumeric(rent)) {
                 Integer salarioNum = Integer.parseInt(rent);
-                if (salarioNum >= 400000 && salarioNum < MAX_SALARY){
+                if (salarioNum >= 400000 && salarioNum < MAX_SALARY) {
                     response.setCode("OK");
                     response.setMessage("Validación rent ok.");
                 } else {
                     response.setCode("NOK");
                     response.setMessage("El rent ingresado no es valido.");
                 }
-            }else{
+            } else {
                 response.setCode("NOK");
                 response.setMessage("El rent ingresado no es numerico.");
             }
-        }catch (java.lang.NumberFormatException e) {
+        } catch (java.lang.NumberFormatException e) {
             LOG.info("Error: ", e);
         }
         return response;
@@ -79,20 +89,20 @@ public class ConsumerCreditServiceImpl implements ConsumerCreditService {
     public Response creditValidate(String credit) {
         Response response = new Response();
         try {
-            if (isNumeric(credit)){
+            if (utilsService.isNumeric(credit)) {
                 Integer creditoNum = Integer.parseInt(credit);
-                if (creditoNum >= MIN_CREDIT_AMMOUNT && creditoNum <= MAX_CREDIT_AMMOUNT){
+                if (creditoNum >= MIN_CREDIT_AMMOUNT && creditoNum <= MAX_CREDIT_AMMOUNT) {
                     response.setCode("OK");
                     response.setMessage("Validación credit ok.");
                 } else {
                     response.setCode("NOK");
                     response.setMessage("El credit ingresado no es valido");
                 }
-            }else{
+            } else {
                 response.setCode("NOK");
                 response.setMessage("El credit ingresado no es numerico.");
             }
-        }catch (java.lang.NumberFormatException e) {
+        } catch (java.lang.NumberFormatException e) {
             LOG.info("Error: ", e);
         }
         return response;
@@ -115,28 +125,23 @@ public class ConsumerCreditServiceImpl implements ConsumerCreditService {
         return response;
     }
 
-    /*public void setDateOfFirstFee(Calendar dateOfFirstFee) {
+    public Response dateOfFirstFeeValidate(Date dateOfFirstFee) {
+        Response response = new Response();
+        Date maxDay = utilsService.addMonthRestFecha(utilsService.fechaActual(), 1);
+        Date minDay = utilsService.addRestFecha(maxDay, -10);
 
-        Calendar today = Calendar.getInstance();
-        Calendar maxMonth = today;
-        Calendar maxDayMonth = today;
-        Calendar minDayMonth = today;
-        maxMonth.add(Calendar.MONTH, 1);
-        maxDayMonth.add(Calendar.DAY_OF_MONTH, -2);
-        minDayMonth.add(Calendar.DAY_OF_MONTH, -10);
+        LOG.info("Fecha minima-->{}", minDay);
+        LOG.info("Fecha maxima-->{}", maxDay);
 
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-
-        Date mesMaximo = maxMonth.getTime();
-        Date hoy = today.getTime();
-
-        if (mesMaximo.compareTo(hoy)>0
-                ) {
-            this.dateOfFirstFee = dateOfFirstFee;
+        if (dateOfFirstFee.after(minDay) && dateOfFirstFee.before(maxDay)) {
+            response.setCode("OK");
+            response.setMessage("Validación fecha ok.");
         } else {
-            throw new IllegalArgumentException();
+            response.setCode("NOK");
+            response.setMessage("La fecha ingresada no es valida.");
         }
-    }*/
+        return response;
+    }
 
     @Override
     public Response nonPaymentMonthsValidate(ArrayList<Integer> nonPaymentMonths) {
@@ -146,7 +151,9 @@ public class ConsumerCreditServiceImpl implements ConsumerCreditService {
                 if (nonPaymentMonths.size() > 2) {
                     response.setCode("NOK");
                     response.setMessage("La cantidad de meses no puede ser mayor a 2");
-                } else if (nonPaymentMonths.size() <= 2) {
+                } else if (nonPaymentMonths.size() == 2) {
+                    response.setCode("OK");
+                    response.setMessage("Validación meses ok.");
                     if (nonPaymentMonths.get(0) + 1 == nonPaymentMonths.get(1)) {
                         response.setCode("NOK");
                         response.setMessage("Los meses no pueden ser consecutivos");
@@ -175,9 +182,5 @@ public class ConsumerCreditServiceImpl implements ConsumerCreditService {
             LOG.info("Error: ", e);
         }
         return response;
-    }
-
-    public boolean isNumeric(String s) {
-        return s != null && s.matches("[-+]?\\d*\\.?\\d+");
     }
 }

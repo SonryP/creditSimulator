@@ -1,5 +1,3 @@
-
-
 $(document).ready(function() {
   
     // Variables of ranges
@@ -37,10 +35,22 @@ $(document).ready(function() {
         onChange: function(selectedDates, dateStr, instance){
             dateSelected = new Date(selectedDates[0]);
             selectmonths.prop('disabled', false);
+            datos = dateSelected
+            $.ajax({
+                type: "POST",
+                url: "/dateOfFirstFeeValidate",
+                data: {"date": datos},
+                cache: false,
+                timeout: 600000,
+                success: function (data) {
+                    data= $.parseJSON(data);
+                    if (data.code === "NOK"){
+                        alert("La fecha ingresada no es valida, intentelo nuevamente.");
+                    }
+                }
+            });
         }
     });
-    
-    
 
     // Submit
     var btnSubmit = $('#submitSimulator');
@@ -121,9 +131,22 @@ $(document).ready(function() {
 
     sliderAmount.on('change', function(){
         amountValue = $(this).val();
-        console.log(amountValue);
+        datos = sliderAmount.val();
+        $.ajax({
+            type: "POST",
+            url: "/creditValidate",
+            data: {"credit": datos},
+            cache: false,
+            timeout: 600000,
+            success: function (data) {
+                data= $.parseJSON(data);
+                if (data.code === "NOK"){
+                    alert("El credito no es valido, ingrese nuevamente.");
+                }
+            }
+        });
     });
-    
+
     // sliderFees events 
     sliderFees.on('input', function(){
         fees.text(`Cuotas: ${$(this).val()}`);
@@ -132,6 +155,20 @@ $(document).ready(function() {
     sliderFees.on('change', function(){
         feesValue = $(this).val();
         console.log(feesValue);
+        datos = feesValue
+        $.ajax({
+            type: "POST",
+            url: "/numOfMonthlyFeesValidate",
+            data: {"numOfMonthlyFees": datos},
+            cache: false,
+            timeout: 600000,
+            success: function (data) {
+                data= $.parseJSON(data);
+                if (data.code === "NOK"){
+                    alert("La cantidad de cuostas no es valida, ingrese nuevamente.");
+                }
+            }
+        });
     });
     
     // Add point to miles
@@ -167,6 +204,4 @@ $(document).ready(function() {
             // TODO NO SUBMIT
         }
     });
-
-
 });

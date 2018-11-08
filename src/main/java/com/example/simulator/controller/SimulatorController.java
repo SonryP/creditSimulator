@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.google.gson.Gson;
 
+import java.util.Date;
+
 @Controller
 public class SimulatorController {
 
@@ -65,6 +67,34 @@ public class SimulatorController {
         try {
             LOG.info("Credito ingresado: {}", credit);
             response = consumerCreditService.creditValidate(credit);
+            LOG.info("Response->{}", response.getCode());
+        } catch (Exception e) {
+            LOG.error("Exception", e);
+        }
+        return new Gson().toJson(response);
+    }
+
+    @RequestMapping(value = "/numOfMonthlyFeesValidate", method = RequestMethod.POST)
+    @ResponseBody
+    public String numOfMonthlyFeesValidate(@RequestParam Integer numOfMonthlyFees) {
+        Response response = new Response();
+        try {
+            LOG.info("Numero de cuotas ingresado: {}", numOfMonthlyFees);
+            response = consumerCreditService.numOfMonthlyFeesValidate(numOfMonthlyFees);
+            LOG.info("Response->{}", response.getCode());
+        } catch (Exception e) {
+            LOG.error("Exception", e);
+        }
+        return new Gson().toJson(response);
+    }
+
+    @RequestMapping(value = "/dateOfFirstFeeValidate", method = RequestMethod.POST)
+    @ResponseBody
+    public String dateOfFirstFeeValidate(@RequestParam Date date) {
+        Response response = new Response();
+        try {
+            LOG.info("Fecha ingresada: {}", date);
+            response = consumerCreditService.dateOfFirstFeeValidate(date);
             LOG.info("Response->{}", response.getCode());
         } catch (Exception e) {
             LOG.error("Exception", e);
