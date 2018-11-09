@@ -136,4 +136,17 @@ public class ConsumerCreditServiceImplTest {
         Response response = consumerCreditService.nonPaymentMonthsValidate(nonPaymentMonths);
         Assert.assertEquals("NOK", response.getCode());
     }
+
+    @Test
+    public void dateOfFirstFeeValidateOK(){
+        Date date = new Date();
+        Date today = new Date();
+        Date maxDay = new Date();
+        Date minDay = new Date();
+        when(utilsService.fechaActual()).thenReturn(today);
+        when(utilsService.addMonthRestFecha(today, 1)).thenReturn(maxDay);
+        when(utilsService.addRestFecha(maxDay, -10)).thenReturn(minDay);
+        Response response = consumerCreditService.dateOfFirstFeeValidate(date);
+        Assert.assertEquals("OK", response.getCode());
+    }
 }

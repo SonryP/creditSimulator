@@ -133,7 +133,7 @@ public class ConsumerCreditServiceImpl implements ConsumerCreditService {
         LOG.info("Fecha minima-->{}", minDay);
         LOG.info("Fecha maxima-->{}", maxDay);
 
-        if (dateOfFirstFee.after(minDay) && dateOfFirstFee.before(maxDay)) {
+        if ((dateOfFirstFee.after(minDay) || dateOfFirstFee.equals(minDay))&& (dateOfFirstFee.before(maxDay) || dateOfFirstFee.equals(maxDay))) {
             response.setCode("OK");
             response.setMessage("Validación fecha ok.");
         } else {
