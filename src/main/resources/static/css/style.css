@@ -72,3 +72,30 @@ input[type="range"]::-webkit-slider-thumb {
 .select2-search__field {
   width: 100%;
 }
+
+.table-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.table-header {
+  background-color: #337ab7;
+  margin: 0;
+}
+
+ tbody, td {
+  border: 1px solid black;
+}
+
+.table-header {
+  border-radius: 10px;
+  padding: 5px;
+  margin: 0;
+  border: 10px solid #337ab7;
+  /* background-color: #337ab7; */
+}
+tr {
+  border: 10px solid black;
+}
